@@ -16,20 +16,20 @@
                 <th>Precio</th>
                 <th>Stock</th>
                 <th>Estado</th>
-                <th><a href="#">Nuevo producto</a></th>
+                <th><a href="index.php?page=Mantenimientos-Productos-Producto&mode=INS">Nuevo producto</a></th>
             </tr>
         </thead>
         <tbody>
             {{foreach productos}}
                 <tr>
                     <td>{{id}}</td>
-                    <td><a href="#">{{name}}</a></td>
+                    <td><a href="index.php?page=Mantenimientos-Productos-Producto&mode=DSP&id={{id}}">{{name}}</a></td>
                     <td>{{price}}</td>
                     <td>{{stock}}</td>
                     <td>{{status}}</td>
                     <td>
-                        <a href="#">Editar</a>
-                        <a href="#">Eliminar</a>
+                        <a href="index.php?page=Mantenimientos-Productos-Producto&mode=UPD&id={{id}}">Editar</a>
+                        <a href="index.php?page=Mantenimientos-Productos-Producto&mode=DEL&id={{id}}">Eliminar</a>
                     </td>
                 </tr>
             {{endfor productos}}

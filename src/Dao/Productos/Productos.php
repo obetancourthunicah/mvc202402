@@ -36,6 +36,32 @@ class Productos extends \Dao\Table
         return self::executeNonQuery($InsSql, $insParams);
     }
 
+    public static function updateProducto(
+        $id,
+        $name,
+        $price,
+        $stock,
+        $status
+    ) {
+        $UpdSql = "UPDATE productos set name = :name, price = :price, stock = :stock, status = :status where id = :id;";
+        $updParams = [
+            'id' => $id,
+            'name' => $name,
+            'price' => $price,
+            'stock' => $stock,
+            'status' => $status
+        ];
+
+        return self::executeNonQuery($UpdSql, $updParams);
+    }
+
+    public static function deleteProducto($id)
+    {
+        $DelSql = "DELETE from productos where id = :id;";
+        $delParams = ['id' => $id];
+        return self::executeNonQuery($DelSql, $delParams);
+    }
+
     public static function readAllProductos($filter = '')
     {
         $sqlstr = "SELECT * from productos where name like :filter;";
