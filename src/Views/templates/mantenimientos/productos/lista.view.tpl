@@ -28,8 +28,15 @@
                     <td>{{stock}}</td>
                     <td>{{status}}</td>
                     <td>
-                        <a href="index.php?page=Mantenimientos-Productos-Producto&mode=UPD&id={{id}}">Editar</a>
-                        <a href="index.php?page=Mantenimientos-Productos-Producto&mode=DEL&id={{id}}">Eliminar</a>
+                        <a href="index.php?page=Mantenimientos-Productos-Producto&mode=UPD&id={{id}}">
+                            <i class="fa-solid fa-pen"></i> &nbsp; Editar
+                        </a>
+                        &nbsp;
+                        &nbsp;
+                        <a href="index.php?page=Mantenimientos-Productos-Producto&mode=DEL&id={{id}}">
+                            <i class="fa-solid fa-trash-can"></i> &nbsp;
+                            Eliminar
+                        </a>
                     </td>
                 </tr>
             {{endfor productos}}

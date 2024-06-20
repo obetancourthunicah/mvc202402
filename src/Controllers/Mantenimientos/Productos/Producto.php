@@ -86,6 +86,12 @@ class Producto extends \Controllers\PublicController
         $tmpStock = $_POST["stock"] ?? "";
         $tmpStatus = $_POST["status"] ?? "";
         $tmpMode = $_POST["mode"] ?? "";
+        $tmpXsrfTk = $_POST["xsrftk"] ?? "";
+
+        $this->getXSRFToken();
+        if (!$this->compareXSRFToken($tmpXsrfTk)) {
+            $this->throwError("Ocurrio un error al procesar la solicitud.");
+        }
 
         if (Validators::IsEmpty($tmpName)) {
             $this->addError("name", "El nombre no puede estar vacio", "error");
@@ -189,8 +195,25 @@ class Producto extends \Controllers\PublicController
         $this->errors[$context . "_" . $key][] = $msg;
     }
 
+    private function generateXSRFToken()
+    {
+        $this->xsrftk = md5(uniqid(rand(), true));
+        $_SESSION[$this->name . "_xsrftk"] = $this->xsrftk;
+    }
+    private function getXSRFToken()
+    {
+        if (isset($_SESSION[$this->name . "_xsrftk"])) {
+            $this->xsrftk = $_SESSION[$this->name . "_xsrftk"];
+        }
+    }
+    private function compareXSRFToken($postXSFR)
+    {
+        return $postXSFR === $this->xsrftk;
+    }
+
     private function showView()
     {
+        $this->generateXSRFToken();
         $viewData = array();
         $viewData["mode"] = $this->mode;
         $viewData["modeDsc"] = sprintf($this->modeDscArr[$this->mode], $this->prdname);
@@ -201,6 +224,9 @@ class Producto extends \Controllers\PublicController
         $viewData["status"] = $this->status;
         $viewData["errors"] = $this->errors;
         $viewData["prdest" . $this->status] = "selected";
+        $viewData["xsrftk"] = $this->xsrftk;
+        $viewData["isReadOnly"] = in_array($this->mode, ["DEL", "DSP"]) ? "readonly" : "";
+        $viewData["isDisplay"] = $this->mode == "DSP";
         \Views\Renderer::render("mantenimientos/productos/form", $viewData);
     }
 }
