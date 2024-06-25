@@ -3,6 +3,7 @@
 namespace Controllers\Mantenimientos\Productos;
 
 use \Dao\Productos\Productos as DaoProductos;
+use \Dao\Productos\Categories as DaoCategories;
 use \Utilities\Validators as Validators;
 use \Utilities\Site as Site;
 
@@ -22,6 +23,9 @@ class Producto extends \Controllers\PublicController
     private $price = 0;
     private $stock = 0;
     private $status = "ACT";
+    private $category_id = 0;
+
+    private $categories = [];
 
     private $errors = array();
     private $xsrftk = "";
@@ -76,6 +80,7 @@ class Producto extends \Controllers\PublicController
             $this->price = $producto["price"];
             $this->stock = $producto["stock"];
             $this->status = $producto["status"];
+            $this->category_id = $producto["category_id"];
         }
     }
 
@@ -87,6 +92,7 @@ class Producto extends \Controllers\PublicController
         $tmpStatus = $_POST["status"] ?? "";
         $tmpMode = $_POST["mode"] ?? "";
         $tmpXsrfTk = $_POST["xsrftk"] ?? "";
+        $tmpCategory_id = $_POST["category"] ?? 0;
 
         $this->getXSRFToken();
         if (!$this->compareXSRFToken($tmpXsrfTk)) {
@@ -97,6 +103,7 @@ class Producto extends \Controllers\PublicController
             $this->addError("name", "El nombre no puede estar vacio", "error");
         }
         $this->prdname = $tmpName;
+
 
         if (Validators::IsEmpty($tmpPrice)) {
             $this->addError("price", "El precio no puede estar vacio", "error");
@@ -123,7 +130,11 @@ class Producto extends \Controllers\PublicController
             $this->throwError("Ocurrio un error al procesar la solicitud.");
         }
 
-        $this->status = $tmpStatus;
+        if ($tmpCategory_id <= 0) {
+            $this->addError("category", "La categoria no puede estar vacia", "error");
+        }
+
+        $this->category_id = $tmpCategory_id;
     }
 
     private function procesarAccion()
@@ -134,7 +145,8 @@ class Producto extends \Controllers\PublicController
                     $this->prdname,
                     $this->price,
                     $this->stock,
-                    $this->status
+                    $this->status,
+                    $this->category_id
                 );
                 $this->validateDBOperation(
                     "Producto insertado correctamente",
@@ -148,7 +160,8 @@ class Producto extends \Controllers\PublicController
                     $this->prdname,
                     $this->price,
                     $this->stock,
-                    $this->status
+                    $this->status,
+                    $this->category_id
                 );
                 $this->validateDBOperation(
                     "Producto actualizado correctamente",
@@ -211,6 +224,20 @@ class Producto extends \Controllers\PublicController
         return $postXSFR === $this->xsrftk;
     }
 
+    private function prepararCategories()
+    {
+        $tmpCategories = DaoCategories::getCategoriesForCombo();
+        $this->categories = [];
+        foreach ($tmpCategories as $category) {
+            if ($category["category_id"] == $this->category_id) {
+                $category["categorySelected"] = "selected";
+            } else {
+                $category["categorySelected"] = "";
+            }
+            $this->categories[] = $category;
+        }
+    }
+
     private function showView()
     {
         $this->generateXSRFToken();
@@ -227,6 +254,8 @@ class Producto extends \Controllers\PublicController
         $viewData["xsrftk"] = $this->xsrftk;
         $viewData["isReadOnly"] = in_array($this->mode, ["DEL", "DSP"]) ? "readonly" : "";
         $viewData["isDisplay"] = $this->mode == "DSP";
+        $this->prepararCategories();
+        $viewData["categories"] = $this->categories;
         \Views\Renderer::render("mantenimientos/productos/form", $viewData);
     }
 }

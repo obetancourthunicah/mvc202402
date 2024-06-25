@@ -25,6 +25,21 @@
             {{endwith errors}}
         </div>
         <div class="row my-4">
+            <label class="col-4" for="category">Categoría:</label>
+            <select class="col-8" type="text" name="category" id="category" {{if isReadOnly}} readonly disabled {{endif isReadOnly}}>
+                {{foreach categories}}
+                    <option value="{{category_id}}" {{categorySelected}}>{{category_name}}</option>
+                {{endfor categories}}
+            </select>   
+            {{with errors}}
+                {{if error_category}}
+                    {{foreach error_category}}
+                        <div class="col-12 error">{{this}}</div>
+                    {{endfor error_category}}
+                {{endif error_category}}
+            {{endwith errors}}
+        </div>
+        <div class="row my-4">
             <label class="col-4" for="prdprc">Precio:</label>
             <input class="col-8" type="number" name="price" id="prdprc" value="{{price}}" required {{isReadOnly}}>
             {{with errors}}

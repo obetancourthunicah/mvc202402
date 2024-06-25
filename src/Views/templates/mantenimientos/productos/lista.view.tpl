@@ -4,7 +4,7 @@
         <section class="grid">
             <form action="index.php?page=Mantenimientos-Productos-Productos" method="post" class="row">
                 <input class="col-8" type="text" name="search" placeholder="Buscar por nombre" value="{{search}}">
-                <button class="col-4" type="submit">Buscar</button>
+                <button class="col-4" type="submit"><i class="fa-solid fa-magnifying-glass"></i> &nbsp;Buscar</button>
             </form>
         </section>
     </section>
@@ -13,21 +13,25 @@
             <tr>
                 <th>Id</th>
                 <th>Nombre</th>
+                <th>Categoría</th>
                 <th>Precio</th>
                 <th>Stock</th>
                 <th>Estado</th>
-                <th><a href="index.php?page=Mantenimientos-Productos-Producto&mode=INS">Nuevo producto</a></th>
+                <th><a href="index.php?page=Mantenimientos-Productos-Producto&mode=INS">
+                    <i class="fa-solid fa-file-circle-plus"></i>
+                    &nbsp; Nuevo producto</a></th>
             </tr>
         </thead>
         <tbody>
             {{foreach productos}}
                 <tr>
                     <td>{{id}}</td>
-                    <td><a href="index.php?page=Mantenimientos-Productos-Producto&mode=DSP&id={{id}}">{{name}}</a></td>
+                    <td><a href="index.php?page=Mantenimientos-Productos-Producto&mode=DSP&id={{id}}"><i class="fa-solid fa-eye"></i> &nbsp;{{name}}</a></td>
+                    <td>{{category_name}}</td>
                     <td>{{price}}</td>
                     <td>{{stock}}</td>
                     <td>{{status}}</td>
-                    <td>
+                    <td class="center">
                         <a href="index.php?page=Mantenimientos-Productos-Producto&mode=UPD&id={{id}}">
                             <i class="fa-solid fa-pen"></i> &nbsp; Editar
                         </a>

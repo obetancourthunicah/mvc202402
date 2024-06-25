@@ -22,15 +22,17 @@ class Productos extends \Dao\Table
         $name,
         $price,
         $stock,
-        $status
+        $status,
+        $category_id
     ) {
-        $InsSql = "INSERT INTO productos (name, price, stock, status, create_time)
-         value (:name, :price, :stock, :status, now());";
+        $InsSql = "INSERT INTO productos (name, price, stock, status, create_time, category_id)
+         value (:name, :price, :stock, :status, now(), :category_id);";
         $insParams = [
             'name' => $name,
             'price' => $price,
             'stock' => $stock,
-            'status' => $status
+            'status' => $status,
+            'category_id' => $category_id
         ];
 
         return self::executeNonQuery($InsSql, $insParams);
@@ -41,15 +43,17 @@ class Productos extends \Dao\Table
         $name,
         $price,
         $stock,
-        $status
+        $status,
+        $category_id
     ) {
-        $UpdSql = "UPDATE productos set name = :name, price = :price, stock = :stock, status = :status where id = :id;";
+        $UpdSql = "UPDATE productos set name = :name, price = :price, stock = :stock, status = :status, category_id = :category_id where id = :id;";
         $updParams = [
             'id' => $id,
             'name' => $name,
             'price' => $price,
             'stock' => $stock,
-            'status' => $status
+            'status' => $status,
+            'category_id' => $category_id
         ];
 
         return self::executeNonQuery($UpdSql, $updParams);
@@ -64,7 +68,7 @@ class Productos extends \Dao\Table
 
     public static function readAllProductos($filter = '')
     {
-        $sqlstr = "SELECT * from productos where name like :filter;";
+        $sqlstr = "SELECT a.*, b.category_name from productos a inner join categories b on a.category_id = b.category_id where name like :filter;";
         $params = array('filter' => '%' . $filter . '%');
         return self::obtenerRegistros($sqlstr, $params);
     }
