@@ -7,7 +7,7 @@ use \Dao\Productos\Categories as DaoCategories;
 use \Utilities\Validators as Validators;
 use \Utilities\Site as Site;
 
-class Producto extends \Controllers\PublicController
+class Producto extends \Controllers\PrivateController
 {
     private $mode = "NAN";
     private $modeDscArr = [

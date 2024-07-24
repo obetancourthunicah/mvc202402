@@ -17,9 +17,13 @@
                 <th>Precio</th>
                 <th>Stock</th>
                 <th>Estado</th>
-                <th><a href="index.php?page=Mantenimientos-Productos-Producto&mode=INS">
+                <th>
+                    {{if mnt_products_new}}
+                    <a href="index.php?page=Mantenimientos-Productos-Producto&mode=INS">
                     <i class="fa-solid fa-file-circle-plus"></i>
-                    &nbsp; Nuevo producto</a></th>
+                    &nbsp; Nuevo producto</a>
+                    {{endif mnt_products_new}}
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -32,15 +36,19 @@
                     <td>{{stock}}</td>
                     <td>{{status}}</td>
                     <td class="center">
+                        {{if ~mnt_products_upt}}
                         <a href="index.php?page=Mantenimientos-Productos-Producto&mode=UPD&id={{id}}">
                             <i class="fa-solid fa-pen"></i> &nbsp; Editar
                         </a>
                         &nbsp;
+                        {{endif ~mnt_products_upt}}
+                        {{if ~mnt_products_del}}
                         &nbsp;
                         <a href="index.php?page=Mantenimientos-Productos-Producto&mode=DEL&id={{id}}">
                             <i class="fa-solid fa-trash-can"></i> &nbsp;
                             Eliminar
                         </a>
+                        {{endif ~mnt_products_del}}
                     </td>
                 </tr>
             {{endfor productos}}

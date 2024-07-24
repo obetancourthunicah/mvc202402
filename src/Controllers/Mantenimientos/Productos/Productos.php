@@ -7,7 +7,11 @@ use \Dao\Productos\Productos as DaoProductos;
 
 const SESSION_PRODUCTOS_SEARCH = "productos_search_data";
 
-class Productos extends \Controllers\PublicController
+const PRODUCTS_NEW = "mnt_products_new";
+const PRODUCTS_UPD = "mnt_products_upt";
+const PRODUCTS_DEL = "mnt_products_del";
+
+class Productos extends \Controllers\PrivateController
 {
     public function run(): void
     {
@@ -19,6 +23,10 @@ class Productos extends \Controllers\PublicController
         }
         $viewData["productos"] = DaoProductos::readAllProductos($viewData["search"]);
         $viewData["total"] = count($viewData["productos"]);
+
+        $viewData[PRODUCTS_NEW] = $this->isFeatureAutorized(PRODUCTS_NEW);
+        $viewData[PRODUCTS_UPD] = $this->isFeatureAutorized(PRODUCTS_UPD);
+        $viewData[PRODUCTS_DEL] = $this->isFeatureAutorized(PRODUCTS_DEL);
 
         \Views\Renderer::render("mantenimientos/productos/lista", $viewData);
     }
